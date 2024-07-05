@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Producto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Editar Producto</h1>
+    <form action="{{ url_for('edit', id=producto.id) }}" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" value="{{ producto.nombre }}">
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" value="{{ producto.stock }}">
+        <label for="precio_unitario">Precio Unitario:</label>
+        <input type="text" id="precio_unitario" name="precio_unitario" value="{{ producto.precio_unitario }}">
+        <button type="submit">Actualizar</button>
+    </form>
+</body>
+</html>
