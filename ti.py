@@ -3,6 +3,7 @@ import pyodbc
 from config import Config
 
 app = Flask(__name__)
+
 def get_db_connection():
     conn = pyodbc.connect(Config.CONNECTION_STRING)
     return conn
@@ -21,10 +22,10 @@ def add():
     if request.method == 'POST':
         nombre = request.form['nombre']
         stock = request.form['stock']
-        precio_unitario = request.form['precio_unitario']
+        precio = request.form['precio']
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO Productos (nombre, stock, precio_unitario) VALUES (?, ?, ?)', (nombre, stock, precio_unitario))
+        cursor.execute('INSERT INTO Productos (nombre, stock, precio) VALUES (?, ?, ?)', (nombre, stock, precio))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
@@ -36,15 +37,17 @@ def edit(id):
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM Productos WHERE id = ?', (id,))
     producto = cursor.fetchone()
+    conn.close()
     if request.method == 'POST':
         nombre = request.form['nombre']
         stock = request.form['stock']
-        precio_unitario = request.form['precio_unitario']
-        cursor.execute('UPDATE Productos SET nombre = ?, stock = ?, precio_unitario = ? WHERE id = ?', (nombre, stock, precio_unitario, id))
+        precio = request.form['precio']
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('UPDATE Productos SET nombre = ?, stock = ?, precio = ? WHERE id = ?', (nombre, stock, precio, id))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
-    conn.close()
     return render_template('edit.html', producto=producto)
 
 @app.route('/delete/<int:id>', methods=['POST'])
@@ -58,4 +61,3 @@ def delete(id):
 
 if __name__ == '__main__':
     app.run(debug=True)
-

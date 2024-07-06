@@ -1,11 +1,9 @@
 import pyodbc
 
-
-
 try:
     conexion = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
-                              'Server=Josedelacruz25;'
-                              'Database=Tienda1;'
+                              'Server=LAPTOP-2GT147OG;'
+                              'Database=TiendaCRUD;'
                               'Trusted_Connection=yes;')
     print("Conexion Correcta")
 

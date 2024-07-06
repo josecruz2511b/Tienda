@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Producto</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Editar Producto</h1>
-    <form action="{{ url_for('edit', id=producto.id) }}" method="post">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" value="{{ producto.nombre }}">
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" value="{{ producto.stock }}">
-        <label for="precio_unitario">Precio Unitario:</label>
-        <input type="text" id="precio_unitario" name="precio_unitario" value="{{ producto.precio_unitario }}">
-        <button type="submit">Actualizar</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="mb-4">Editar Producto</h1>
+        <form action="{{ url_for('edit', id=producto.id) }}" method="post">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ producto.nombre }}">
+            </div>
+            <div class="form-group">
+                <label for="stock">Stock:</label>
+                <input type="number" class="form-control" id="stock" name="stock" value="{{ producto.stock }}">
+            </div>
+            <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="text" class="form-control" id="precio" name="precio" value="{{ producto.precio }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+        </form>
+    </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 class Config:
-    SQL_SERVER = 'JOSEDELACRUZ25'
-    DATABASE = 'Tienda2'
+    SQL_SERVER = 'LAPTOP-2GT147OG'
+    DATABASE = 'TiendaCRUD'
     DRIVER = 'SQL Server'
     CONNECTION_STRING = f'DRIVER={DRIVER};SERVER={SQL_SERVER};DATABASE={DATABASE};Trusted_Connection=yes;'
