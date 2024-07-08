@@ -11,31 +11,31 @@
         <form action="{{ url_for('edit_empleado', id=empleado.id) }}" method="post">
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ empleado.nombre }}">
+                <input type="text" class="form-control" id="nombre" name="nombre" value="{{ empleado.nombre }}" required minlength="1" maxlength="100">
             </div>
             <div class="form-group">
                 <label for="ap">Apellido Paterno:</label>
-                <input type="text" class="form-control" id="ap" name="ap" value="{{ empleado.ap }}">
+                <input type="text" class="form-control" id="ap" name="ap" value="{{ empleado.ap }}" required minlength="1" maxlength="100">
             </div>
             <div class="form-group">
                 <label for="am">Apellido Materno:</label>
-                <input type="text" class="form-control" id="am" name="am" value="{{ empleado.am }}">
+                <input type="text" class="form-control" id="am" name="am" value="{{ empleado.am }}" required minlength="1" maxlength="100">
             </div>
             <div class="form-group">
                 <label for="usuario">Usuario:</label>
-                <input type="text" class="form-control" id="usuario" name="usuario" value="{{ empleado.usuario }}">
+                <input type="text" class="form-control" id="usuario" name="usuario" value="{{ empleado.usuario }}" required minlength="1" maxlength="50">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ empleado.email }}">
+                <input type="email" class="form-control" id="email" name="email" value="{{ empleado.email }}" required maxlength="100">
             </div>
             <div class="form-group">
                 <label for="contraseña">Contraseña:</label>
-                <input type="password" class="form-control" id="contraseña" name="contraseña" value="{{ empleado.contraseña }}">
+                <input type="password" class="form-control" id="contraseña" name="contraseña" value="{{ empleado.contraseña }}" required minlength="6" maxlength="100">
             </div>
             <div class="form-group">
                 <label for="rol_id">Rol:</label>
-                <select class="form-control" id="rol_id" name="rol_id">
+                <select class="form-control" id="rol_id" name="rol_id" required>
                     {% for rol in roles %}
                     <option value="{{ rol.id }}" {% if rol.id == empleado.rol_id %}selected{% endif %}>{{ rol.nombre }}</option>
                     {% endfor %}
