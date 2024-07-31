@@ -10,20 +10,25 @@
             const precio = document.getElementById("precio").value;
             let isValid = true;
 
-            if (isNaN(stock) || stock <= 0 || !Number.isInteger(parseFloat(stock))) {
-                document.getElementById("stockError").innerText = "El stock debe ser un número entero positivo.";
+            if (isNaN(stock) || stock <= 0 || stock > 1000000 || stock.toLowerCase().includes('e')) {
+                document.getElementById("stockError").innerText = "El stock debe ser un número entero positivo menor a 1,000,000.";
                 isValid = false;
             } else {
                 document.getElementById("stockError").innerText = "";
             }
 
-            if (isNaN(precio) || precio <= 0) {
+            if (isNaN(precio) || precio <= 0 || precio.toLowerCase().includes('e')) {
                 document.getElementById("precioError").innerText = "El precio debe ser un número positivo.";
                 isValid = false;
             } else {
                 document.getElementById("precioError").innerText = "";
             }
-
+            if (isNaN(precio) || precio <= 0 || precio > 1000000 || precio.toLowerCase().includes('e')) {
+                document.getElementById("precioError").innerText = "El Precio debe ser un número entero positivo menor a 1,000,000.";
+                isValid = false;
+            } else {
+                document.getElementById("precioError").innerText = "";
+            }
             return isValid;
         }
     </script>

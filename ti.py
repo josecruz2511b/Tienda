@@ -1,14 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import pyodbc
 from config import Config
 
 app = Flask(__name__)
-
+app.secret_key = 'your_secret_key'  # Necesario para usar flash
 
 def get_db_connection():
     conn = pyodbc.connect(Config.CONNECTION_STRING)
     return conn
-
 
 @app.route('/')
 def index():
@@ -19,7 +18,6 @@ def index():
     conn.close()
     return render_template('index.html', productos=productos)
 
-
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
@@ -27,6 +25,15 @@ def add():
         stock = request.form['stock']
         precio = request.form['precio']
 
+        # Validar campos
+        try:
+            stock = int(stock)
+            precio = float(precio)
+            if stock <= 0 or stock > 1000000 or 'e' in request.form['stock'].lower() or 'e' in request.form['precio'].lower():
+                raise ValueError
+        except ValueError:
+            flash('Stock debe ser un número entero positivo menor a 1,000,000. Precio debe ser un número positivo.')
+            return redirect(url_for('add'))
 
         # Guardar en la base de datos si las validaciones son correctas
         conn = get_db_connection()
@@ -36,7 +43,6 @@ def add():
         conn.close()
         return redirect(url_for('index'))
     return render_template('add.html')
-
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
@@ -51,16 +57,24 @@ def edit(id):
         stock = request.form['stock']
         precio = request.form['precio']
 
+        # Validar campos
+        try:
+            stock = int(stock)
+            precio = float(precio)
+            if stock <= 0 or stock > 1000000 or 'e' in request.form['stock'].lower() or 'e' in request.form['precio'].lower():
+                raise ValueError
+        except ValueError:
+            flash('Stock debe ser un número entero positivo menor a 1,000,000. Precio debe ser un número positivo.')
+            return redirect(url_for('edit', id=id))
+
         # Actualizar en la base de datos si las validaciones son correctas
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute('UPDATE Productos SET nombre = ?, stock = ?, precio = ? WHERE id = ?',
-                       (nombre, stock, precio, id))
+        cursor.execute('UPDATE Productos SET nombre = ?, stock = ?, precio = ? WHERE id = ?', (nombre, stock, precio, id))
         conn.commit()
         conn.close()
         return redirect(url_for('index'))
     return render_template('edit.html', producto=producto)
-
 
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete(id):
@@ -70,7 +84,6 @@ def delete(id):
     conn.commit()
     conn.close()
     return redirect(url_for('index'))
-
 
 # Funciones y rutas para empleados
 
@@ -83,7 +96,6 @@ def empleados_index():
     conn.close()
     return render_template('empleados/index.html', empleados=empleados)
 
-
 @app.route('/empleados/add', methods=['GET', 'POST'])
 def add_empleado():
     if request.method == 'POST':
@@ -95,12 +107,9 @@ def add_empleado():
         contraseña = request.form['contraseña']
         rol_id = request.form['rol_id']
 
-
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute(
-            'INSERT INTO Empleados (nombre, ap, am, usuario, email, contraseña, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            (nombre, ap, am, usuario, email, contraseña, rol_id))
+        cursor.execute('INSERT INTO Empleados (nombre, ap, am, usuario, email, contraseña, rol_id) VALUES (?, ?, ?, ?, ?, ?, ?)', (nombre, ap, am, usuario, email, contraseña, rol_id))
         conn.commit()
         conn.close()
         return redirect(url_for('empleados_index'))
@@ -111,7 +120,6 @@ def add_empleado():
     roles = cursor.fetchall()
     conn.close()
     return render_template('empleados/add.html', roles=roles)
-
 
 @app.route('/empleados/edit/<int:id>', methods=['GET', 'POST'])
 def edit_empleado(id):
@@ -128,11 +136,7 @@ def edit_empleado(id):
         contraseña = request.form['contraseña']
         rol_id = request.form['rol_id']
 
-
-
-        cursor.execute(
-            'UPDATE Empleados SET nombre = ?, ap = ?, am = ?, usuario = ?, email = ?, contraseña = ?, rol_id = ? WHERE id = ?',
-            (nombre, ap, am, usuario, email, contraseña, rol_id, id))
+        cursor.execute('UPDATE Empleados SET nombre = ?, ap = ?, am = ?, usuario = ?, email = ?, contraseña = ?, rol_id = ? WHERE id = ?', (nombre, ap, am, usuario, email, contraseña, rol_id, id))
         conn.commit()
         conn.close()
         return redirect(url_for('empleados_index'))
